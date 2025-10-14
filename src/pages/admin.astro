@@ -1,0 +1,27 @@
+---
+// Tina CMS Admin Page
+const isDev = import.meta.env.DEV;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tina CMS Admin</title>
+  </head>
+  <body>
+    {isDev ? (
+      <script is:inline type="module">
+        // Redirect to the Tina admin in development
+        window.location.href = '/admin/index.html';
+      </script>
+    ) : (
+      <div style="padding: 2rem; text-align: center; font-family: sans-serif;">
+        <h1>CMS Admin</h1>
+        <p>The CMS admin is only available in development mode.</p>
+        <p>Run <code>pnpm dev</code> to access the admin panel.</p>
+      </div>
+    )}
+  </body>
+</html>
