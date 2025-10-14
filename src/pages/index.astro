@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import MainLayout from "../layouts/MainLayout.astro";
 import siteConfig from "../site.config";
 import { sortItemsByDateDesc, withBase } from "../utils/helpers";
@@ -8,8 +7,9 @@ import Button from "../components/Button.astro";
 import { Image } from "astro:assets";
 import heroImage from "../assets/images/pixeltrue-space-discovery.svg";
 import ArrowRight from "../icons/ArrowRight.astro";
+import { getAllBlogPosts } from "../utils/strapi";
 
-const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
+const allPosts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
 ---
 
 <MainLayout

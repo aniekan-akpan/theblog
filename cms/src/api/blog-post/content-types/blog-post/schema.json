@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog_posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog Post",
+    "description": "Blog post content for the Astro frontend"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "pubDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "author": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "json"
+    },
+    "draft": {
+      "type": "boolean",
+      "default": false
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.image"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    }
+  }
+}

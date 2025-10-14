@@ -1,34 +1,41 @@
 {
   "name": "aniekan-blog",
   "type": "module",
-  "version": "0.11.3",
+  "version": "0.12.0",
+  "description": "Personal blog built with Astro and Strapi CMS",
+  "author": "Aniekan Akpan",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
-    "dev": "concurrently \"astro dev\" \"tinacms dev -c 'astro dev'\"",
-    "dev:astro": "astro dev",
-    "dev:tina": "tinacms dev -c 'astro dev'",
+    "dev": "astro dev",
+    "dev:cms": "cd cms && npm run develop",
+    "dev:all": "concurrently \"npm run dev:cms\" \"npm run dev\"",
     "start": "astro build && astro preview",
-    "build": "tinacms build && astro build",
+    "build": "astro build",
+    "build:cms": "cd cms && npm run build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/preact": "^4.1.1",
+    "@astrojs/react": "^4.4.0",
     "@astrojs/rss": "4.0.12",
     "@astrojs/sitemap": "^3.6.0",
     "@swup/astro": "^1.7.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.8",
     "preact": "^10.27.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "sharp": "^0.34.4",
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "@tinacms/cli": "^1.11.0",
     "@types/node": "^24.7.2",
     "concurrently": "^9.2.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "tinacms": "^2.9.0",
     "typescript": "^5.9.2"
   }
 }

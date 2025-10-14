@@ -27,9 +27,13 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# Tina CMS
-.tina/__generated__
-tina/__generated__
-public/admin
-
-node_modules
+# Strapi CMS
+cms/dist
+cms/.tmp
+cms/.cache
+cms/build
+cms/.strapi
+cms/public/uploads
+cms/node_modules
+cms/.env
+cms/database

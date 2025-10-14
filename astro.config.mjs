@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import preact from "@astrojs/preact";
+import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import swup from "@swup/astro";
 
@@ -15,7 +15,7 @@ export default defineConfig({
       cache: true,
       progress: true,
     }),
-    preact(),
+    react(),
     sitemap(),
   ],
 
@@ -25,6 +25,15 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        // Alias Preact to React for Tina compatibility
+        'preact': 'react',
+        'preact/hooks': 'react',
+        'preact/jsx-runtime': 'react/jsx-runtime',
+        'preact/jsx-dev-runtime': 'react/jsx-dev-runtime',
+      },
+    },
   },
 });
 

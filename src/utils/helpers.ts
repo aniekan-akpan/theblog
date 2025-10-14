@@ -1,7 +1,7 @@
-import { type CollectionEntry } from 'astro:content';
+import type { BlogPost } from './strapi';
 
-export function sortItemsByDateDesc(itemA: CollectionEntry<'blogs'>, itemB: CollectionEntry<'blogs'>) {
-    return new Date(itemB.data.pubDate).getTime() - new Date(itemA.data.pubDate).getTime();
+export function sortItemsByDateDesc(itemA: BlogPost, itemB: BlogPost) {
+    return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime();
 }
 
 export function createSlugFromTitle(title: string): string {
@@ -13,8 +13,8 @@ export function createSlugFromTitle(title: string): string {
         .replace(/-+/g, '-'); // Replace multiple hyphens with a single hyphen
 }
 
-export function getAllTags(posts: CollectionEntry<'blogs'>[]) {
-    const tags: string[] = [...new Set(posts.flatMap((post) => post.data.tags || []).filter(Boolean))];
+export function getAllTags(posts: BlogPost[]) {
+    const tags: string[] = [...new Set(posts.flatMap((post) => post.tags || []).filter(Boolean))];
     return tags
         .map((tag) => {
             return {
@@ -27,8 +27,8 @@ export function getAllTags(posts: CollectionEntry<'blogs'>[]) {
         });
 }
 
-export function getPostsByTag(posts: CollectionEntry<'blogs'>[], tagId: string) {
-    const filteredPosts: CollectionEntry<'blogs'>[] = posts.filter((post) => (post.data.tags || []).map((tag) => createSlugFromTitle(tag)).includes(tagId));
+export function getPostsByTag(posts: BlogPost[], tagId: string) {
+    const filteredPosts: BlogPost[] = posts.filter((post) => (post.tags || []).map((tag) => createSlugFromTitle(tag)).includes(tagId));
     return filteredPosts;
 }
 

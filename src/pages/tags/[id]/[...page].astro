@@ -1,48 +1,41 @@
 ---
-import { getCollection } from "astro:content";
 import {
-  getAllTags,
-  getPostsByTag,
+  createSlugFromTitle,
   sortItemsByDateDesc,
 } from "../../../utils/helpers";
 import type { GetStaticPathsOptions, Page } from "astro";
 import siteConfig from "../../../site.config";
-import type { CollectionEntry } from "astro:content";
 import MainLayout from "../../../layouts/MainLayout.astro";
 import Pagination from "../../../components/Pagination.astro";
-import Subscribe from "../../../components/Subscribe.astro";
 import PostListPreview from "../../../components/PostListPreview.astro";
+import { getAllBlogPosts, getAllTags, type BlogPost } from "../../../utils/strapi";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const posts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
-  const tags = getAllTags(posts);
+  const posts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
+  const tags = await getAllTags();
 
   return tags.flatMap((tag) => {
-    const filteredPosts = getPostsByTag(posts, tag.id);
+    const filteredPosts = posts.filter(post => post.tags?.includes(tag));
     return paginate(filteredPosts, {
-      params: { id: tag.id },
+      params: { id: createSlugFromTitle(tag) },
       pageSize: siteConfig.postsPerPage || 2,
+      props: { tagName: tag },
     });
   });
 }
 
-type Props = { page: Page<CollectionEntry<"blogs">> };
+type Props = { 
+  page: Page<BlogPost>;
+  tagName: string;
+};
 
-const { page } = Astro.props;
+const { page, tagName } = Astro.props;
 const blog = page.data;
-const params = Astro.params;
-const allPosts = await getCollection("blogs", (post) =>
-  post.data.tags?.includes(params.id)
-);
-const allTags = getAllTags(allPosts);
-const currentTag = allTags.find((tag) => {
-  return tag.id === params.id;
-});
 ---
 
-<MainLayout pageTitle={siteConfig.title + "| " + currentTag?.name + " posts"}>
+<MainLayout pageTitle={siteConfig.title + "| " + tagName + " posts"}>
   <div class="page-content">
-    <h2>Posts tagged with <span class="sigmar-ff">{currentTag?.name}</span></h2>
+    <h2>Posts tagged with <span class="sigmar-ff">{tagName}</span></h2>
     <div class="flex flex-col gap-8 max-w-full text-left mt-3">
       {blog.map((post) => <PostListPreview post={post} />)}
     </div>

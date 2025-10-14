@@ -1,23 +1,23 @@
 ---
-import { type CollectionEntry } from "astro:content";
+import type { BlogPost } from "../utils/strapi";
 import ArrowRight from "../icons/ArrowRight.astro";
 import FormattedDate from "./FormattedDate.astro";
 import { withBase } from "../utils/helpers";
 
 type Props = {
-  post: CollectionEntry<"blogs">;
+  post: BlogPost;
   class?: string;
   headingLevel?: "h2" | "h3";
 };
 
 const { post, class: className, headingLevel = "h2" } = Astro.props;
-const { title, pubDate, description } = post.data;
+const { title, pubDate, description, slug } = post;
 const TitleTag = headingLevel;
 ---
 
 <a
   class:list={["flex justify-between items-start gap-8 group", className]}
-  href={withBase("/blog/" + post.id)}
+  href={withBase("/blog/" + slug)}
 >
   <div class="grow">
     <TitleTag class="sigmar-ff">{title}</TitleTag>

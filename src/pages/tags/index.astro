@@ -1,21 +1,23 @@
 ---
 import {
-  getAllTags,
-  getPostsByTag,
-  sortItemsByDateDesc,
+  createSlugFromTitle,
   withBase,
 } from "../../utils/helpers";
-import { getCollection } from "astro:content";
 import Button from "../../components/Button.astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import siteConfig from "../../site.config";
+import { getAllBlogPosts, getAllTags } from "../../utils/strapi";
 
-const posts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
-const tags = getAllTags(posts).sort((tagA, tagB) => {
-  const postCountTagA = getPostsByTag(posts, tagA.id).length;
-  const postCountTagB = getPostsByTag(posts, tagB.id).length;
-  return postCountTagB - postCountTagA;
-});
+const posts = await getAllBlogPosts();
+const allTags = await getAllTags();
+
+// Count posts per tag
+const tagCounts = allTags.map(tag => {
+  const count = posts.filter(post => 
+    post.tags?.includes(tag)
+  ).length;
+  return { name: tag, count };
+}).sort((a, b) => b.count - a.count);
 ---
 
 <MainLayout
@@ -27,11 +29,10 @@ const tags = getAllTags(posts).sort((tagA, tagB) => {
     <p class="kanit-regular">Select a tag to view related posts.</p>
     <div class="flex flex-wrap items-center justify-center gap-4">
       {
-        tags.map((tag) => {
-          const postCount = getPostsByTag(posts, tag.id).length;
+        tagCounts.map((tag) => {
           return (
-            <Button href={`${withBase("/tags/" + tag.id)}`} class="px-4! m-2">
-              {tag.name} ({postCount})
+            <Button href={`${withBase("/tags/" + createSlugFromTitle(tag.name))}`} class="px-4! m-2">
+              {tag.name} ({tag.count})
             </Button>
           );
         })

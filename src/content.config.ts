@@ -1,23 +1,7 @@
-import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+// Content is now managed via Strapi CMS
+// See docs/STRAPI_SETUP.md for configuration instructions
 
-const blogsCollection = defineCollection({
-    loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blogs" }),
-    schema: ({ image }) => z.object({
-        title: z.string(),
-        description: z.string(),
-        pubDate: z.date(),
-        author: z.string().optional(),
-        tags: z.array(z.string()).optional(),
-        draft: z.boolean().optional(),
-        image: z.object({
-            url: image(),
-            alt: z.string().optional()
-        })
-        .optional(),
-    }),
-});
+// Note: This file is kept to prevent Astro warnings.
+// All blog content is fetched from Strapi via the API client in src/utils/strapi.ts
 
-export const collections = {
-    blogs: blogsCollection,
-};
+export const collections = {};

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_images",
+  "info": {
+    "displayName": "Image",
+    "description": "Image component with URL and alt text"
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "alt": {
+      "type": "string"
+    }
+  }
+}
