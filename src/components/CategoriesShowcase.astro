@@ -1,0 +1,175 @@
+---
+import { withBase } from "../utils/helpers";
+
+const categories = [
+  {
+    name: "Technology",
+    slug: "technology",
+    icon: "💻",
+    description: "Exploring code, innovation, and the digital frontier",
+    color: "#06b6d4",
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+  },
+  {
+    name: "Life",
+    slug: "life",
+    icon: "🌱",
+    description: "Personal experiences, growth, and reflections",
+    color: "#f43f5e",
+    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+  },
+  {
+    name: "Think Out Loud",
+    slug: "think-out-loud",
+    icon: "💭",
+    description: "Random musings, deep thoughts, and everything in between",
+    color: "#8b5cf6",
+    gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
+  }
+];
+---
+
+<section class="categories-showcase">
+  <h2 class="sigmar-ff text-center categories-title">Explore by Category</h2>
+  <p class="kanit-light text-center categories-subtitle">
+    Dive into different worlds of thought and experience
+  </p>
+  
+  <div class="categories-grid">
+    {categories.map((category) => (
+      <a 
+        href={withBase(`/tags/${category.slug}`)} 
+        class="category-card"
+        data-category={category.slug}
+      >
+        <div class="category-card-bg" style={`background: ${category.gradient}`}></div>
+        <div class="category-card-content">
+          <span class="category-card-icon">{category.icon}</span>
+          <h3 class="category-card-title sigmar-ff" style={`color: ${category.color}`}>{category.name}</h3>
+          <p class="category-card-description kanit-light">{category.description}</p>
+          <span class="category-card-cta kanit-medium" style={`color: ${category.color}`}>
+            Explore →
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .categories-showcase {
+    margin: 4rem 0;
+  }
+
+  .categories-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .categories-subtitle {
+    font-size: 1.125rem;
+    opacity: 0.7;
+    margin-bottom: 3rem;
+    max-width: 32rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .categories-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .category-card {
+    position: relative;
+    padding: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    min-height: 250px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.light) .category-card {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .category-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  }
+
+  :global(.light) .category-card:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  }
+
+  .category-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.15;
+    transition: opacity 0.3s;
+  }
+
+  :global(.light) .category-card-bg {
+    opacity: 0.1;
+  }
+
+  .category-card:hover .category-card-bg {
+    opacity: 0.25;
+  }
+
+  :global(.light) .category-card:hover .category-card-bg {
+    opacity: 0.15;
+  }
+
+  .category-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .category-card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .category-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .category-card-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .category-card-cta {
+    font-size: 0.875rem;
+    transition: transform 0.2s;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .category-card:hover .category-card-cta {
+    transform: translateX(8px);
+  }
+</style>

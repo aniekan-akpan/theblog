@@ -8,10 +8,45 @@
 
 /* 0. color variables & fonts */
 :root {
-  --space-red: #90393a;
-  --space-yellow: #ffff85;
-  --space-sand: #e2d1c3;
-  --space-stone: #434343;
+  /* Dark Theme Color Palette - Emerald Green */
+  --bg-primary: #0a1612;
+  --bg-secondary: #0f1f1a;
+  --bg-tertiary: #16342a;
+  --bg-elevated: #1e4439;
+  
+  --text-primary: #ecfdf5;
+  --text-secondary: #a7f3d0;
+  --text-tertiary: #6ee7b7;
+  
+  --accent-primary: #10b981;
+  --accent-secondary: #34d399;
+  --accent-success: #6ee7b7;
+  --accent-warning: #fbbf24;
+  --accent-error: #f87171;
+  
+  --border-primary: #1e4439;
+  --border-secondary: #16342a;
+  --border-focus: #10b981;
+  
+  --shadow-sm: rgba(0, 0, 0, 0.4);
+  --shadow-md: rgba(0, 0, 0, 0.6);
+  --shadow-lg: rgba(0, 0, 0, 0.8);
+  
+  /* Legacy compatibility */
+  --garden-sage: #10b981;
+  --garden-moss: #6ee7b7;
+  --garden-soil: #a7f3d0;
+  --garden-leaf: #10b981;
+  --garden-bloom: #fbbf24;
+  --garden-sky: #34d399;
+  --garden-stone: #6ee7b7;
+  --garden-cream: #ecfdf5;
+  --garden-bark: #0a1612;
+  
+  --space-red: var(--accent-primary);
+  --space-yellow: var(--accent-secondary);
+  --space-sand: var(--text-primary);
+  --space-stone: var(--bg-primary);
 }
 
 /* Required to ensure dark: modifiers work when manually toggling mode */
@@ -20,11 +55,40 @@
 
 @theme {
   --font-sans: "Kanit", "sans-serif";
-  --color-space-red: var(--space-red);
-  --color-space-yellow: var(--space-yellow);
-  --color-space-sand: var(--space-sand);
-  --color-space-stone: var(--space-stone);
-  --color-whitesmoke: whitesmoke;
+  
+  /* Dark Theme Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-elevated: var(--bg-elevated);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-success: var(--accent-success);
+  
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  
+  /* Legacy mappings */
+  --color-garden-sage: var(--accent-primary);
+  --color-garden-moss: var(--accent-success);
+  --color-garden-soil: var(--text-secondary);
+  --color-garden-leaf: var(--accent-primary);
+  --color-garden-bloom: var(--accent-warning);
+  --color-garden-sky: var(--accent-secondary);
+  --color-garden-stone: var(--text-tertiary);
+  --color-garden-cream: var(--text-primary);
+  --color-garden-bark: var(--bg-primary);
+  
+  --color-space-red: var(--accent-primary);
+  --color-space-yellow: var(--accent-secondary);
+  --color-space-sand: var(--text-primary);
+  --color-space-stone: var(--bg-primary);
+  --color-whitesmoke: var(--text-primary);
 }
 
 /* 1. html elements */
@@ -34,19 +98,28 @@ body {
   overscroll-behavior: none;
 }
 
-html.dark body {
-  background-image: linear-gradient(
+body {
+  /* Pure dark theme background */
+  background: linear-gradient(
     to bottom,
-    var(--color-space-stone) 0%,
-    black 100%
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 50%,
+    var(--bg-primary) 100%
   );
-  @apply bg-black bg-cover bg-no-repeat text-whitesmoke;
+  @apply bg-cover bg-no-repeat;
+  color: var(--text-primary);
 }
 
+/* Remove light mode styles - force dark theme always */
+html.dark body,
 html.light body {
-  /* background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
-  background-image: linear-gradient(180deg, #fdfcfb 0%, #e2d1c3 100%);
-  @apply bg-space-sand bg-cover bg-no-repeat text-black;
+  background: linear-gradient(
+    to bottom,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 50%,
+    var(--bg-primary) 100%
+  );
+  color: var(--text-primary);
 }
 
 /* semantic elements */
@@ -56,13 +129,23 @@ header {
 
 header > nav {
   @apply flex flex-row items-center justify-between gap-2 rounded-4xl px-5 py-2 text-xs backdrop-blur-3xl sm:gap-8 sm:py-3 sm:text-base;
-  /* inner glow 👇 */
+  /* Dark theme navigation */
+  background: rgba(15, 31, 26, 0.9);
+  border: 1px solid var(--border-primary);
   box-shadow:
-    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
-    /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
-    /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
-    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
-    0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+    inset 0 0 0.5px 1px rgba(16, 185, 129, 0.15),
+    0 4px 16px var(--shadow-md),
+    0 8px 32px var(--shadow-lg);
+}
+
+html.dark header > nav,
+html.light header > nav {
+  background: rgba(15, 31, 26, 0.9);
+  border-color: var(--border-primary);
+  box-shadow:
+    inset 0 0 0.5px 1px rgba(16, 185, 129, 0.15),
+    0 4px 16px var(--shadow-md),
+    0 8px 32px var(--shadow-lg);
 }
 
 main {
@@ -92,31 +175,70 @@ img {
 /* links */
 a.button-link:not(:disabled),
 button.button-link:not(:disabled) {
-  @apply inline-flex cursor-pointer items-center justify-center rounded-full border px-6 py-2 leading-tight transition hover:border-space-red hover:text-space-red sm:px-8 hover:dark:border-space-yellow hover:dark:text-space-yellow;
+  @apply inline-flex cursor-pointer items-center justify-center rounded-full border px-6 py-2 leading-tight transition-all duration-300 hover:shadow-lg;
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
 }
+
+a.button-link:hover:not(:disabled),
+button.button-link:hover:not(:disabled) {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
 a.button-link.space-btn-filled:not(:disabled),
 button.button-link.space-btn-filled:not(:disabled) {
-  @apply bg-black text-whitesmoke hover:border-space-red hover:bg-space-red dark:bg-whitesmoke dark:text-black dark:hover:border-space-yellow dark:hover:bg-space-yellow;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border-color: var(--accent-primary);
 }
+
+a.button-link.space-btn-filled:hover:not(:disabled),
+button.button-link.space-btn-filled:hover:not(:disabled) {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 8px 20px rgba(52, 211, 153, 0.5);
+}
+
 a.button-link.space-btn-outlined:not(:disabled),
 button.button-link.space-btn-outlined:not(:disabled) {
-  @apply border border-black bg-transparent text-black hover:border-space-red hover:text-space-red dark:border-whitesmoke dark:bg-transparent dark:text-whitesmoke dark:hover:border-space-yellow dark:hover:text-space-yellow;
+  background: transparent;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
 }
 
-html.dark a:not(.button-link) {
-  @apply text-whitesmoke;
+a.button-link.space-btn-outlined:hover:not(:disabled),
+button.button-link.space-btn-outlined:hover:not(:disabled) {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  background: rgba(16, 185, 129, 0.1);
 }
 
+a:not(.button-link),
+html.dark a:not(.button-link),
 html.light a:not(.button-link) {
-  @apply text-black;
+  color: var(--accent-primary);
+  transition: color 0.3s ease;
 }
 
+a:not(.button-link):hover,
+html.dark a:not(.button-link):hover,
 html.light a:not(.button-link):hover {
-  @apply text-space-red;
+  color: var(--accent-secondary);
 }
 
-html.dark a:not(.button-link):hover {
-  @apply text-space-yellow;
+/* Social Icon Styles */
+.social-icon-link {
+  @apply transition-all duration-300;
+  color: var(--text-primary);
+}
+
+.social-icon-link:hover,
+html.light .social-icon-link:hover,
+html.dark .social-icon-link:hover {
+  color: var(--accent-primary);
 }
 
 .page-content {
@@ -131,6 +253,100 @@ html.dark a:not(.button-link):hover {
 
 .blinking {
   animation: cursor-blink 1.2s steps(2) infinite;
+}
+
+/* Hero Section Animations - Digital Garden Theme */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Gentle organic sway like leaves in breeze */
+@keyframes sway {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  33% {
+    transform: translateX(10px) rotate(1deg);
+  }
+  66% {
+    transform: translateX(-10px) rotate(-1deg);
+  }
+}
+
+/* Organic growth animation */
+@keyframes grow {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Gentle float like seeds on wind */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.02);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.03);
+  }
+}
+
+/* Pulsing glow like bioluminescent plants */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 10s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-sway {
+  animation: sway 5s ease-in-out infinite;
+}
+
+.animate-grow {
+  animation: grow 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
 }
 
 @media (orientation: portrait) {

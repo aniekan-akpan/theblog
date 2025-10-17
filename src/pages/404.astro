@@ -1,33 +1,212 @@
 ---
-import { Image } from "astro:assets";
 import MainLayout from "../layouts/MainLayout.astro";
 import { withBase } from "../utils/helpers";
-import heroImage from "../assets/images/pixeltrue-space-discovery.svg";
-import SpaceKeyboard from "../components/SpaceKeyboard.astro";
+import Button from "../components/Button.astro";
 import siteConfig from "../site.config";
 ---
 
 <MainLayout
   activePage="404"
-  pageTitle={siteConfig.title + " | 404"}
+  pageTitle={siteConfig.title + " | Page Not Found"}
   showSubscribeForm={false}
 >
-  <div class="flex flex-col items-center justify-center page-content">
-    <h1 class="sigmar-ff">404</h1>
-    <Image
-      class="cover-img"
-      src={heroImage}
-      alt={"Astronaut in space"}
-      width={400}
-      height={300}
-    />
-    <p>🧑‍🚀: Houston, we have a problem.</p>
-    <p>
-      We couldn't find that link. Verify the address or <a
-        class="font-medium underline"
-        href={withBase("/")}>Go Back Home</a
-      >
-    </p>
-    <SpaceKeyboard />
+  <div class="error-page">
+    <div class="error-container">
+      <div class="error-content">
+        <div class="error-code">
+          <span class="four">4</span>
+          <span class="zero">0</span>
+          <span class="four">4</span>
+        </div>
+        
+        <h1 class="error-title sigmar-ff">Lost in Space</h1>
+        
+        <p class="error-message kanit-regular">
+          🧑‍🚀 Houston, we have a problem. The page you're looking for has drifted into the void.
+        </p>
+
+        <div class="error-actions">
+          <Button href={withBase("/")} class="space-btn-filled">
+            Return to Earth
+          </Button>
+          <Button href={withBase("/blog")} class="space-btn-outlined">
+            Explore the Blog
+          </Button>
+        </div>
+
+        <div class="error-links">
+          <p class="kanit-light">Or navigate to:</p>
+          <div class="quick-links">
+            <a href={withBase("/blog")} class="quick-link">Blog</a>
+            <span class="divider">•</span>
+            <a href={withBase("/projects")} class="quick-link">Projects</a>
+            <span class="divider">•</span>
+            <a href={withBase("/about")} class="quick-link">About</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </MainLayout>
+
+<style>
+  .error-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .error-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .error-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Sigmar', cursive;
+    font-size: 8rem;
+    line-height: 1;
+    margin-bottom: 0;
+  }
+
+  .error-code span {
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+    background: linear-gradient(135deg, 
+      rgba(16, 185, 129, 1) 0%, 
+      rgba(52, 211, 153, 0.9) 50%,
+      rgba(110, 231, 183, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.5));
+  }
+
+  .error-code .zero {
+    animation-delay: 0.2s;
+  }
+
+  .error-code .four:last-child {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .error-title {
+    font-size: 2.5rem;
+    margin: 0;
+    padding: 0;
+    text-balance: balance;
+  }
+
+  .error-message {
+    font-size: 1.125rem;
+    max-width: 600px;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin: 0.5rem 0;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .error-links {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .error-links p {
+    margin: 0;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  .quick-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .quick-link {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+  }
+
+  .quick-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width 0.3s ease;
+  }
+
+  .quick-link:hover::after {
+    width: 100%;
+  }
+
+  .quick-link:hover {
+    color: rgba(16, 185, 129, 1);
+  }
+
+  .divider {
+    opacity: 0.4;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .error-code {
+      font-size: 5rem;
+      gap: 0.25rem;
+    }
+
+    .error-title {
+      font-size: 2rem;
+    }
+
+    .error-message {
+      font-size: 1rem;
+    }
+
+    .error-actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+</style>

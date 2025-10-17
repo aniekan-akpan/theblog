@@ -14,59 +14,188 @@ const { activePage } = Astro.props;
     <div class="hidden sm:flex sm:gap-8">
       {(<NavLinks activePage={activePage} links={siteConfig.headerNavLinks} />)}
     </div>
-    <ThemeSwitcher />
+    <!-- Theme Switcher removed for full dark theme -->
     <Hamburger />
   </nav>
   <div
-    id="mobile-links"
-    class="font-light animated h-0 m-0 opacity-0 top-0 w-full"
+    id="mobile-menu-overlay"
+    class="mobile-menu-overlay"
   >
-    <span class="close-menu">❌</span>
-    <NavLinks
-      activePage={activePage}
-      links={siteConfig.headerNavLinks}
-      isMobileLink={true}
-    />
+    <div id="mobile-links" class="mobile-menu-content">
+      <div class="mobile-menu-header">
+        <span class="mobile-menu-title sigmar-ff">Menu</span>
+        <button class="close-menu" aria-label="Close menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="mobile-nav-links">
+        <NavLinks
+          activePage={activePage}
+          links={siteConfig.headerNavLinks}
+          isMobileLink={true}
+        />
+      </div>
+      <div class="mobile-menu-footer">
+        <p class="kanit-light">© 2025 {siteConfig.title}</p>
+      </div>
+    </div>
   </div>
 </header>
 <script is:inline>
   document.querySelector("#hamburger-menu").addEventListener("click", () => {
-    console.log("clicked...");
-    document.querySelector("#mobile-links").classList.remove("slideOutUp");
-    document.querySelector("#mobile-links").classList.add("expanded");
-    document.querySelector("#mobile-links").classList.add("slideInDown");
+    const overlay = document.querySelector("#mobile-menu-overlay");
+    const menu = document.querySelector("#mobile-links");
+    overlay.classList.add("active");
+    menu.classList.add("active");
+    document.body.style.overflow = 'hidden';
   });
 
   document.querySelector(".close-menu").addEventListener("click", () => {
-    console.log("clicked...");
-    document.querySelector("#mobile-links").classList.add("slideOutUp");
-    document.querySelector("#mobile-links").classList.add("expanded");
-    document.querySelector("#mobile-links").classList.remove("slideInDown");
+    const overlay = document.querySelector("#mobile-menu-overlay");
+    const menu = document.querySelector("#mobile-links");
+    overlay.classList.remove("active");
+    menu.classList.remove("active");
+    document.body.style.overflow = '';
+  });
+
+  // Close menu when clicking overlay
+  document.querySelector("#mobile-menu-overlay").addEventListener("click", (e) => {
+    if (e.target.id === "mobile-menu-overlay") {
+      const overlay = document.querySelector("#mobile-menu-overlay");
+      const menu = document.querySelector("#mobile-links");
+      overlay.classList.remove("active");
+      menu.classList.remove("active");
+      document.body.style.overflow = '';
+    }
   });
 </script>
 
 <style>
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    background: rgba(10, 22, 18, 0.95);
+    backdrop-filter: blur(20px);
+  }
+
+  /* Mobile Menu Content */
+  .mobile-menu-content {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: linear-gradient(
+      135deg,
+      rgba(15, 31, 26, 0.98) 0%,
+      rgba(22, 52, 42, 0.95) 100%
+    );
+    border-left: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: 
+      -8px 0 32px rgba(0, 0, 0, 0.8),
+      inset 1px 0 0 rgba(16, 185, 129, 0.1);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .mobile-menu-content.active {
+    right: 0;
+  }
+
+  /* Mobile Menu Header */
+  .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .mobile-menu-title {
+    font-size: 1.75rem;
+    color: var(--accent-primary);
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .close-menu {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+  }
+
+  .close-menu:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(52, 211, 153, 0.5);
+    transform: rotate(90deg);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .close-menu svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Mobile Nav Links Container */
+  .mobile-nav-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Mobile Menu Footer */
+  .mobile-menu-footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    text-align: center;
+    opacity: 0.6;
+    font-size: 0.875rem;
+  }
+
+  /* Hide on desktop */
+  @media (min-width: 640px) {
+    .mobile-menu-overlay,
+    .mobile-menu-content {
+      display: none;
+    }
+  }
+
+  /* Legacy styles removed */
   @media (orientation: portrait) {
     #mobile-links.expanded {
-      align-items: end;
-      background-color: #0000007a;
-      backdrop-filter: blur(72px);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      justify-content: end;
-      position: absolute;
-      z-index: 10;
-      opacity: 1;
-      padding: 1rem 2rem;
-      width: 100vw;
-      top: 0;
-      min-height: fit-content;
-      border-bottom-left-radius: 0.5rem;
-      border-bottom-right-radius: 0.5rem;
-    }
-    html.light #mobile-links.expanded {
-      background-color: #ffffff6a;
+      display: none;
     }
   }
 </style>

@@ -1,0 +1,86 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getPaginatedProjects } from '../../utils/strapi';
+import type { Project } from '../../utils/strapi';
+
+const page = Number(Astro.url.searchParams.get('page') || '1');
+
+// Handle errors gracefully
+let projects: Project[] = [];
+let pagination = { page: 1, pageCount: 1, pageSize: 9, total: 0 };
+try {
+  const result = await getPaginatedProjects(page, 9);
+  projects = result.projects;
+  pagination = result.pagination;
+} catch (error) {
+  console.log("No projects available yet");
+}
+
+const pageTitle = 'Projects';
+const pageDescription = 'A showcase of my projects and work.';
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <div class="mb-12 text-center">
+      <h1 class="sigmar-ff text-balance">
+        Projects
+      </h1>
+      <p class="text-lg kanit-light text-balance">
+        {pageDescription}
+      </p>
+    </div>
+
+    {projects.length === 0 ? (
+      <div class="text-center py-12">
+        <p class="text-zinc-400">No projects found. Check back soon!</p>
+      </div>
+    ) : (
+      <>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+
+        {pagination && pagination.pageCount > 1 && (
+          <div class="mt-12 flex justify-center gap-2">
+            {page > 1 && (
+              <a
+                href={`/projects?page=${page - 1}`}
+                class="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-700 hover:bg-zinc-900"
+              >
+                Previous
+              </a>
+            )}
+            
+            <div class="flex items-center gap-2">
+              {Array.from({ length: pagination.pageCount }, (_, i) => i + 1).map((p) => (
+                <a
+                  href={p === 1 ? '/projects' : `/projects?page=${p}`}
+                  class={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                    p === page
+                      ? 'border-blue-500 bg-blue-500/20 text-blue-400'
+                      : 'border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-900'
+                  }`}
+                >
+                  {p}
+                </a>
+              ))}
+            </div>
+
+            {page < pagination.pageCount && (
+              <a
+                href={`/projects?page=${page + 1}`}
+                class="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-700 hover:bg-zinc-900"
+              >
+                Next
+              </a>
+            )}
+          </div>
+        )}
+      </>
+    )}
+  </div>
+</MainLayout>

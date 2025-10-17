@@ -1,7 +1,9 @@
-import type { BlogPost } from './strapi';
+import type { BlogPost, Podcast, Project } from './strapi';
 
-export function sortItemsByDateDesc(itemA: BlogPost, itemB: BlogPost) {
-    return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime();
+export function sortItemsByDateDesc(itemA: BlogPost | Podcast | Project, itemB: BlogPost | Podcast | Project) {
+    const dateA = 'pubDate' in itemA ? itemA.pubDate : ('startDate' in itemA ? itemA.startDate : new Date());
+    const dateB = 'pubDate' in itemB ? itemB.pubDate : ('startDate' in itemB ? itemB.startDate : new Date());
+    return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
 }
 
 export function createSlugFromTitle(title: string): string {

@@ -11,19 +11,82 @@ const {
 ---
 
 {
-  links?.map((link) => {
+  links?.map((link, index) => {
+    const isActive = activePage === link.text.toLowerCase();
     const classNames = [
-      isMobileLink ? "close-menu" : "",
-      activePage === link.text.toLowerCase()
-        ? "text-space-red! dark:text-space-yellow!"
-        : "",
+      isMobileLink ? "mobile-nav-link" : "",
+      isActive ? "active" : "",
     ]
       .join(" ")
       .trim();
     return (
-      <a class={classNames} href={link.href}>
+      <a 
+        class={classNames} 
+        href={link.href}
+        style={isMobileLink ? `animation-delay: ${index * 0.1}s` : ''}
+      >
         {link.text}
       </a>
     );
   })
 }
+
+<style>
+  .mobile-nav-link {
+    font-family: 'Sigmar', cursive;
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    animation: slideInFromRight 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  @keyframes slideInFromRight {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .mobile-nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--accent-primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: var(--accent-primary);
+    transform: translateX(8px);
+    box-shadow: 
+      0 4px 16px rgba(16, 185, 129, 0.2),
+      inset 0 0 20px rgba(16, 185, 129, 0.05);
+  }
+
+  .mobile-nav-link:hover::before,
+  .mobile-nav-link.active::before {
+    transform: scaleY(1);
+  }
+
+  .mobile-nav-link.active {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  }
+</style>

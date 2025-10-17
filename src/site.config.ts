@@ -69,11 +69,11 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
     website: 'https://aniekan-akpan.github.io',
-    title: 'Aniekan Blog',
-    description: 'A minimal space-inspired personal blog template built with Astro.js and Tailwind CSS',
+    title: 'Aniekan Akpan',
+    description: 'A digital garden where ideas grow and flourish - a personal space for thoughts, projects, and creative explorations',
     image: {
         src: '/aniekan-blog-preview.jpeg',
-        alt: 'Aniekan Blog - A minimal space-inspired personal blog template.'
+        alt: 'Aniekan Blog - A digital garden for thoughts and ideas.'
     },
     headerNavLinks: [
         {
@@ -84,18 +84,22 @@ const siteConfig: SiteConfig = {
             text: 'Blog',
             href: withBase('/blog')
         },
+        // {
+        //     text: 'Podcasts',
+        //     href: withBase('/podcasts')
+        // },
         {
-            text: 'Tags',
-            href: withBase('/tags')
+            text: 'Projects',
+            href: withBase('/projects')
         },
         {
             text: 'About',
             href: withBase('/about')
         },
-        {
-            text: 'Contact',
-            href: withBase('/contact')
-        }
+        // {
+        //     text: 'Contact',
+        //     href: withBase('/contact')
+        // }
     ],
     footerNavLinks: [
         {
@@ -103,9 +107,21 @@ const siteConfig: SiteConfig = {
             href: withBase('/about')
         },
         {
-            text: 'Contact',
-            href: withBase('/contact')
+            text: 'Blog',
+            href: withBase('/blog')
         },
+        // {
+        //     text: 'Podcasts',
+        //     href: withBase('/podcasts')
+        // },
+        {
+            text: 'Projects',
+            href: withBase('/projects')
+        },
+        // {
+        //     text: 'Contact',
+        //     href: withBase('/contact')
+        // },
         {
             text: 'RSS Feed',
             href: withBase('/rss.xml')
@@ -130,21 +146,21 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        eyebrowText: 'Galaxy of Adventures',
-        title: 'Aniekan Blog ✨',
-        text: "Written by Aniekan, a space explorer at Beyond Earth.",
+        eyebrowText: 'my personal online space',
+        title: 'Hi, I\'m Aniekan',
+        text: "I'm a software developer passionate about building elegant solutions to complex problems. I write about web development, design, and the things I learn along the way.",
         image: {
-            src: '/assets/images/pixeltrue-space-discovery.svg',
-            alt: 'A person sitting at a desk in front of a computer'
+            src: '/assets/images/1.png',
+            alt: 'Aniekan profile photo'
         },
         actions: [
             {
-                text: 'Read Now',
+                text: 'Read My Blog',
                 href: withBase('/blog')
             },
             {
-                text: 'Subscribe',
-                href: '#subscribe'
+                text: 'View Projects',
+                href: withBase('/projects')
             }
         ]
     },
@@ -183,7 +199,8 @@ const siteConfig: SiteConfig = {
     blog: {
         description: "Read about my space adventures, explorations and the aliens I've met on my journeys."
     },
-    postsPerPage: 2,
+    postsPerPage: 5,
+    projectsPerPage: 9,
     recentPostLimit: 3
 };
 

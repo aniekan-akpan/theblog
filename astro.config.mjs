@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import swup from "@swup/astro";
+// import swup from "@swup/astro"; // Disabled page transitions
 
 import tailwindcss from "@tailwindcss/vite";
 
@@ -10,11 +10,11 @@ export default defineConfig({
   site: "https://aniekan-akpan.github.io",
   base: "/aniekan-blog",
   integrations: [
-    swup({
-      theme: ["overlay", { direction: "to-top" }],
-      cache: true,
-      progress: true,
-    }),
+    // swup({
+    //   theme: ["overlay", { direction: "to-top" }],
+    //   cache: true,
+    //   progress: true,
+    // }),
     react(),
     sitemap(),
   ],

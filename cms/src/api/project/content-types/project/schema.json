@@ -1,0 +1,81 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Project",
+    "description": "Portfolio projects showcase"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "technologies": {
+      "type": "json",
+      "description": "Array of technologies used in the project"
+    },
+    "liveUrl": {
+      "type": "string",
+      "description": "Live project URL"
+    },
+    "githubUrl": {
+      "type": "string",
+      "description": "GitHub repository URL"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Feature this project on homepage"
+    },
+    "startDate": {
+      "type": "date",
+      "description": "Project start date"
+    },
+    "endDate": {
+      "type": "date",
+      "description": "Project end date (optional for ongoing projects)"
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.image"
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"],
+      "description": "Project screenshots and images"
+    },
+    "tags": {
+      "type": "json",
+      "description": "Project tags and categories"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["planning", "in-progress", "completed", "maintenance"],
+      "default": "completed"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0,
+      "description": "Display order for sorting projects"
+    }
+  }
+}

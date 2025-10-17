@@ -5,11 +5,39 @@ import { sortItemsByDateDesc, withBase } from "../utils/helpers";
 import PostCardPreview from "../components/PostCardPreview.astro";
 import Button from "../components/Button.astro";
 import { Image } from "astro:assets";
-import heroImage from "../assets/images/pixeltrue-space-discovery.svg";
+import heroImage from "../assets/images/1.png";
 import ArrowRight from "../icons/ArrowRight.astro";
 import { getAllBlogPosts } from "../utils/strapi";
+import Twitter from "../icons/Twitter.astro";
+import Instagram from "../icons/Instagram.astro";
+import LinkedIn from "../icons/LinkedIn.astro";
+import GitHub from "../icons/GitHub.astro";
+import Dribbble from "../icons/Dribbble.astro";
+import Peerlist from "../icons/Peerlist.astro";
 
 const allPosts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
+
+// Filter posts by "Thinking out loud" tag
+const thinkingOutLoudPosts = allPosts.filter(post => 
+  post.tags?.some(tag => tag.toLowerCase() === 'thinking out loud')
+);
+
+// Map social link text to icon components
+const socialIconMap: Record<string, any> = {
+  'X/Twitter': Twitter,
+  'Twitter': Twitter,
+  'Instagram': Instagram,
+  'LinkedIn': LinkedIn,
+  'GitHub': GitHub,
+  'Dribbble': Dribbble,
+  'Peerlist': Peerlist,
+};
+
+// Function to get icon component for a link
+const getIconForLink = (linkText: string) => {
+  const normalizedText = linkText.trim();
+  return socialIconMap[normalizedText] || null;
+};
 ---
 
 <MainLayout
@@ -33,8 +61,27 @@ const allPosts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
       <p class="kanit-regular text-balance text-xs sm:text-base">
         {siteConfig.hero?.text}
       </p>
+      
+      <!-- Social Icons -->
+      <div class="flex items-center gap-4 mt-6 mb-8">
+        {siteConfig.socialLinks?.map((link) => {
+          const IconComponent = getIconForLink(link.text);
+          return IconComponent ? (
+            <a 
+              href={link.href} 
+              class="social-icon-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={link.text}
+            >
+              <IconComponent class="w-5 h-5" />
+            </a>
+          ) : null;
+        })}
+      </div>
+
       <div
-        class="flex flex-wrap items-center text-xs sm:text-base gap-x-2 gap-y-8 mt-3 sm:mt-12"
+        class="flex flex-wrap items-center text-xs sm:text-base gap-x-2 gap-y-8 mt-3 sm:mt-6"
       >
         {
           siteConfig.hero?.actions?.map((action, index) => (
@@ -48,14 +95,13 @@ const allPosts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
         }
       </div>
     </div>
-    <div class="w-full sm:w-fit sm:max-w-1/2">
-      <!-- {siteConfig.hero?.image && <Image src={siteConfig.hero?.image?.src} alt={siteConfig.hero?.image?.alt || ""} inferSize={true} />} -->
+    <div class="w-full sm:w-fit sm:max-w-1/2 flex justify-center sm:justify-end">
       <Image
-        class="cover-img"
+        class="hero-profile-img"
         src={heroImage}
-        alt={"Astronaut in space"}
+        alt={"Aniekan profile photo"}
         width={400}
-        height={300}
+        height={400}
       />
     </div>
   </div>
@@ -73,5 +119,110 @@ const allPosts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
         View All Posts <ArrowRight class="w-5 h-5 fill-current ml-4" />
       </Button>
     </div>
+
+    <!-- Thinking Out Loud Section -->
+    {thinkingOutLoudPosts.length > 0 && (
+      <div id="thinking-out-loud" class="flex flex-col items-center justify-center w-full mt-16">
+        <div class="section-header">
+          <h2 class="sigmar-ff text-balance pt-0! pb-2!">Thinking Out Loud</h2>
+          <p class="kanit-light text-center opacity-80 mb-8">
+            Random thoughts, musings, and ideas
+          </p>
+        </div>
+        <div class="flex flex-col gap-8 max-w-full text-left">
+          {thinkingOutLoudPosts
+            .slice(0, 3)
+            .map((post) => <PostCardPreview post={post} />)
+          }
+        </div>
+        {thinkingOutLoudPosts.length > 3 && (
+          <Button href={withBase("/tags/thinking-out-loud")} class="space-btn-outlined mt-8">
+            View All Thoughts <ArrowRight class="w-5 h-5 fill-current ml-4" />
+          </Button>
+        )}
+      </div>
+    )}
   </div>
 </MainLayout>
+
+<style>
+  .section-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .hero-profile-img {
+    border-radius: 1rem;
+    object-fit: cover;
+    width: 320px;
+    height: 320px;
+    border: 4px solid rgba(16, 185, 129, 0.5);
+    box-shadow: 
+      0 10px 40px rgba(16, 185, 129, 0.3),
+      0 0 60px rgba(16, 185, 129, 0.2),
+      0 0 100px rgba(16, 185, 129, 0.15);
+    transform: rotate(3deg);
+    transition: all 0.4s ease;
+  }
+
+  .hero-profile-img:hover {
+    transform: rotate(0deg) scale(1.03);
+    border-color: rgba(52, 211, 153, 0.7);
+    box-shadow: 
+      0 15px 50px rgba(16, 185, 129, 0.4),
+      0 0 80px rgba(52, 211, 153, 0.35),
+      0 0 120px rgba(16, 185, 129, 0.25);
+  }
+
+  .social-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: var(--text-primary);
+  }
+
+  .social-icon-link svg {
+    fill: currentColor;
+    color: var(--text-primary);
+  }
+
+  .social-icon-link:hover {
+    background-color: rgba(16, 185, 129, 0.25);
+    border-color: rgba(52, 211, 153, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    color: var(--accent-primary);
+  }
+
+  .social-icon-link:hover svg {
+    color: var(--accent-primary);
+  }
+
+  @media (max-width: 640px) {
+    .hero-profile-img {
+      width: 280px;
+      height: 280px;
+      border-width: 3px;
+    }
+    
+    .jumbo-banner {
+      text-align: center;
+    }
+    
+    .jumbo-banner > div:first-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .jumbo-banner h1,
+    .jumbo-banner p {
+      text-align: center;
+    }
+  }
+</style>

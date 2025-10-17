@@ -45,6 +45,18 @@
     "slug": {
       "type": "uid",
       "targetField": "title"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "blog_post"
+    },
+    "likes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::like.like",
+      "mappedBy": "blog_post"
     }
   }
 }

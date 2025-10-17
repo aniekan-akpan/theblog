@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comments",
+  "info": {
+    "singularName": "comment",
+    "pluralName": "comments",
+    "displayName": "Comment",
+    "description": "User comments on blog posts"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "authorName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the comment author"
+    },
+    "authorEmail": {
+      "type": "email",
+      "required": true,
+      "description": "Email of the comment author (not displayed publicly)"
+    },
+    "authorWebsite": {
+      "type": "string",
+      "description": "Optional website URL"
+    },
+    "blog_post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::blog-post.blog-post",
+      "inversedBy": "comments"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Comment moderation status"
+    },
+    "parentComment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::comment.comment",
+      "description": "For nested replies"
+    },
+    "ipAddress": {
+      "type": "string",
+      "private": true,
+      "description": "IP address for spam prevention"
+    }
+  }
+}

@@ -11,10 +11,33 @@ My personal blog built with Astro and Strapi CMS.
 - 📝 Content management with [Strapi v5](https://strapi.io) headless CMS
 - 🎨 Styled with [Tailwind CSS](https://tailwindcss.com)
 - 📱 Fully responsive design
+- 📰 **Blog Posts** with rich text content
+- 💼 **Projects Portfolio** showcase
+- ❤️ **Like System** for blog posts (session-based)
+- 💬 **Comments System** with moderation
 - 🏷️ Tag-based organization
 - 📄 Pagination support
 - 🔍 SEO optimized
 - 📡 RSS feed
+
+## 🎯 Content Types
+
+### Blog Posts
+- Rich text editing with Strapi
+- Image uploads and galleries
+- Tags and categories
+- Draft/Publish workflow
+- Interactive likes and comments
+- Author information and publishing dates
+
+### Projects
+- Portfolio project showcase
+- Technology stack tags
+- Live demo and GitHub repository links
+- Project status tracking (planning, in-progress, completed, maintenance)
+- Featured projects highlighting
+- Image galleries
+- Project timelines
 
 ## 🛠️ Tech Stack
 
@@ -28,15 +51,20 @@ My personal blog built with Astro and Strapi CMS.
 - Node.js 20.x (managed with fnm or nvm)
 - pnpm (or npm)
 
-## 🏁 Getting Started
+## 🏁 Quick Start
 
-### 1. Install Dependencies
+### Option 1: Quick Setup (Recommended)
+See **[QUICKSTART.md](./QUICKSTART.md)** for a 5-minute setup guide.
+
+### Option 2: Full Setup
+
+1. **Install Dependencies**
 
 ```bash
 pnpm install
 ```
 
-### 2. Set Up Strapi CMS
+2. **Set Up Strapi CMS**
 
 Make sure you're using Node.js 20:
 
@@ -89,9 +117,39 @@ pnpm dev:all
 All blog content is managed through the Strapi CMS:
 
 1. Go to `http://localhost:1337/admin`
-2. Navigate to **Content Manager → Blog Posts**
-3. Create, edit, or delete blog posts
-4. Rebuild your Astro site to see changes
+2. Navigate to **Content Manager**
+3. Manage:
+   - **Blog Posts** - Create articles with likes and comments
+   - **Projects** - Showcase your portfolio work
+   - **Comments** - Moderate user comments
+   - **Likes** - View analytics on post engagement
+
+**Important**: You must set proper permissions in Strapi for the frontend to access the API.
+See [QUICKSTART.md](./QUICKSTART.md) step 2 for details.
+
+## 📚 Documentation
+
+- **[QUICKSTART.md](./QUICKSTART.md)** - 5-minute setup guide ⚡
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete setup and deployment guide 📖
+- [Strapi Setup Guide](./docs/STRAPI_SETUP.md) - Detailed CMS configuration
+- [Migration Guide](./docs/MIGRATION.md) - TinaCMS to Strapi migration details
+- [Quick Reference](./docs/QUICK_REFERENCE.md) - Quick reference card
+- [Astro Documentation](https://docs.astro.build)
+- [Strapi Documentation](https://docs.strapi.io)
+
+## 🎨 Customization
+
+### Styling
+All components use Tailwind CSS. Main styling files:
+- `src/styles/global.css` - Global styles
+- Component files (`.astro`, `.tsx`) - Component-specific styles
+
+### Features
+- **Likes**: Session-based, no authentication required
+- **Comments**: Moderated, requires approval in Strapi admin
+- **Projects**: Full portfolio management with galleries
+
+See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for advanced customization options.
 
 ## 🚢 Deployment
 
@@ -113,7 +171,10 @@ Update `.env` with production Strapi URL:
 
 ```env
 PUBLIC_STRAPI_URL=https://your-strapi-instance.com
+STRAPI_API_TOKEN=your-production-api-token
 ```
+
+See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed deployment instructions.
 
 ## 📚 Documentation
 

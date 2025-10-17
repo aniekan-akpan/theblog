@@ -7,10 +7,13 @@ import {
 } from "../../utils/helpers";
 import Button from "../../components/Button.astro";
 import MainLayout from "../../layouts/MainLayout.astro";
+import CategoryLayout from "../../layouts/CategoryLayout.astro";
 import ArrowLeft from "../../icons/ArrowLeft.astro";
 import ArrowRight from "../../icons/ArrowRight.astro";
 import siteConfig from "../../site.config";
 import { getAllBlogPosts, type BlogPost } from "../../utils/strapi";
+import LikeButton from "../../components/LikeButton";
+import Comments from "../../components/Comments";
 
 export async function getStaticPaths() {
   const posts = (await getAllBlogPosts()).sort(sortItemsByDateDesc);
@@ -32,24 +35,60 @@ type Props = {
 };
 
 const { post, prevPost, nextPost } = Astro.props;
-const { title, pubDate, author, tags = [], image, body } = post;
+const { title, pubDate, author, tags = [], image, body, id, likesCount = 0, commentsCount = 0 } = post;
+
+// Determine category from tags
+const categoryMap: { [key: string]: "technology" | "life" | "think-out-loud" } = {
+  technology: "technology",
+  tech: "technology",
+  coding: "technology",
+  programming: "technology",
+  life: "life",
+  lifestyle: "life",
+  personal: "life",
+  growth: "life",
+  "think out loud": "think-out-loud",
+  thoughts: "think-out-loud",
+  philosophy: "think-out-loud",
+  musings: "think-out-loud",
+};
+
+let postCategory: "technology" | "life" | "think-out-loud" | null = null;
+for (const tag of tags) {
+  const normalizedTag = tag.toLowerCase();
+  if (categoryMap[normalizedTag]) {
+    postCategory = categoryMap[normalizedTag];
+    break;
+  }
+}
+
+const Layout = postCategory ? CategoryLayout : MainLayout;
+const layoutProps: any = postCategory 
+  ? { pageTitle: siteConfig.title + " | " + title, category: postCategory }
+  : { pageTitle: siteConfig.title + " | " + title, activePage: "blog" };
 ---
 
-<MainLayout pageTitle={siteConfig.title + " | " + title}>
-  <div class="page-content">
+<Layout {...layoutProps}>
+  <div class="page-content post-detail">
     <h1 class="sigmar-ff text-center text-balance">{title}</h1>
-    <p class="leading-8 text-center kanit-regular text-balance text-xs">
+    <p class="leading-8 text-center kanit-regular text-balance text-xs post-meta">
       by 🧑‍🚀 <span class="kanit-bold">{author}</span> on <span class="kanit-bold"
         >{new Date(pubDate).toDateString()}</span
       >
     </p>
     {
       image && image.url && (
-        <img class="mb-8 my-6 w-full h-auto" src={image.url} alt={image.alt || ""} />
+        <img class="post-image mb-8 my-6 w-full h-auto" src={image.url} alt={image.alt || ""} />
       )
     }
-    <div class="font-light text-left" set:html={body} />
-    <p class="kanit-regular text-center text-balance text-xs">
+    <div class="post-body font-light text-left" set:html={body} />
+    
+    <!-- Like Button Section -->
+    <div class="my-8 flex justify-center">
+      <LikeButton client:load postId={id} initialLikeCount={likesCount} />
+    </div>
+    
+    <p class="kanit-regular text-center text-balance text-xs post-tags">
       Tagged: {
         tags.map((tag) => (
           <Button
@@ -61,6 +100,10 @@ const { title, pubDate, author, tags = [], image, body } = post;
         ))
       }
     </p>
+    
+    <!-- Comments Section -->
+    <Comments client:load postId={id} />
+    
     <div
       class="flex flex-col sm:flex-row items-center justify-center gap-4 my-8"
     >
@@ -80,4 +123,23 @@ const { title, pubDate, author, tags = [], image, body } = post;
       }
     </div>
   </div>
-</MainLayout>
+</Layout>
+
+<style>
+  .post-detail {
+    max-width: 48rem;
+  }
+
+  .post-meta {
+    margin-bottom: 2rem;
+  }
+
+  .post-image {
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .post-tags {
+    margin: 2rem 0;
+  }
+</style>

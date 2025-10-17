@@ -1,7 +1,31 @@
 ---
 import siteConfig from "../site.config";
 import SiteIdentity from "./SiteIdentity.astro";
+import Twitter from "../icons/Twitter.astro";
+import Instagram from "../icons/Instagram.astro";
+import LinkedIn from "../icons/LinkedIn.astro";
+import GitHub from "../icons/GitHub.astro";
+import Dribbble from "../icons/Dribbble.astro";
+import Peerlist from "../icons/Peerlist.astro";
+
 const currentYear = new Date().getFullYear();
+
+// Map social link text to icon components
+const socialIconMap: Record<string, any> = {
+  'X/Twitter': Twitter,
+  'Twitter': Twitter,
+  'Instagram': Instagram,
+  'LinkedIn': LinkedIn,
+  'GitHub': GitHub,
+  'Dribbble': Dribbble,
+  'Peerlist': Peerlist,
+};
+
+// Function to get icon component for a link
+const getIconForLink = (linkText: string) => {
+  const normalizedText = linkText.trim();
+  return socialIconMap[normalizedText] || null;
+};
 ---
 
 <footer class="kanit-light text-xs sm:text-sm">
@@ -18,14 +42,6 @@ const currentYear = new Date().getFullYear();
           </a>
         ))
       }
-      <!-- Hi! -->
-      <!-- Feel free to remove the below link or keep it to share your love for this theme! -->
-      <a
-        href="https://github.com/djsiddz/space-ahead"
-        title="Download Space Ahead ✨ Astro Theme"
-        target="_blank">Download Theme</a
-      >
-      <!-- Thank you! -->
     </div>
   </div>
   <div
@@ -37,11 +53,24 @@ const currentYear = new Date().getFullYear();
     </div>
     <div class="flex flex-row gap-4 items-center justify-end-safe">
       {
-        siteConfig.socialLinks?.map((link) => (
-          <a href={link.href} title={link.text} target="_blank">
-            {link.text}
-          </a>
-        ))
+        siteConfig.socialLinks?.map((link) => {
+          const Icon = getIconForLink(link.text);
+          return Icon ? (
+            <a 
+              href={link.href} 
+              title={link.text} 
+              target="_blank"
+              class="social-icon-link hover:scale-110 transition-transform duration-300"
+              aria-label={link.text}
+            >
+              <Icon class="w-5 h-5 fill-current" />
+            </a>
+          ) : (
+            <a href={link.href} title={link.text} target="_blank">
+              {link.text}
+            </a>
+          );
+        })
       }
     </div>
   </div>

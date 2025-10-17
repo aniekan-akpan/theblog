@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "podcasts",
+  "info": {
+    "singularName": "podcast",
+    "pluralName": "podcasts",
+    "displayName": "Podcast",
+    "description": "Podcast episodes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "audioUrl": {
+      "type": "string",
+      "required": true
+    },
+    "duration": {
+      "type": "string"
+    },
+    "pubDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "coverImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.image"
+    },
+    "tags": {
+      "type": "json"
+    },
+    "transcript": {
+      "type": "richtext"
+    },
+    "author": {
+      "type": "string",
+      "default": "Aniekan Akpan"
+    },
+    "episodeNumber": {
+      "type": "integer"
+    },
+    "season": {
+      "type": "integer"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -1,0 +1,208 @@
+---
+import { Image } from "astro:assets";
+import FormattedDate from "./FormattedDate.astro";
+import type { Podcast } from "../utils/strapi";
+import { withBase } from "../utils/helpers";
+
+interface Props {
+  podcast: Podcast;
+  class?: string;
+}
+
+const { podcast, class: className } = Astro.props;
+const { title, description, pubDate, coverImage, duration, episodeNumber, season, slug } = podcast;
+---
+
+<article class:list={["podcast-card", className]}>
+  <a href={withBase(`/podcasts/${slug}`)} class="podcast-link">
+    <div class="podcast-image-container">
+      {coverImage && coverImage.url ? (
+        <img 
+          src={coverImage.url} 
+          alt={coverImage.alt || title} 
+          class="podcast-image"
+        />
+      ) : (
+        <div class="podcast-image-placeholder">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+          </svg>
+        </div>
+      )}
+      {duration && (
+        <div class="duration-badge">
+          {duration}
+        </div>
+      )}
+    </div>
+    
+    <div class="podcast-content">
+      <div class="podcast-meta">
+        {episodeNumber && season && (
+          <span class="episode-info">S{season}E{episodeNumber}</span>
+        )}
+        {episodeNumber && !season && (
+          <span class="episode-info">Episode {episodeNumber}</span>
+        )}
+        <FormattedDate date={pubDate} />
+      </div>
+      
+      <h3 class="podcast-title">{title}</h3>
+      
+      <p class="podcast-description">{description}</p>
+      
+      <div class="podcast-footer">
+        <span class="listen-cta">Listen Now →</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .podcast-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.light) .podcast-card {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .podcast-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  :global(.light) .podcast-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .podcast-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .podcast-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .podcast-image,
+  .podcast-image-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .podcast-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-space-red) 0%, var(--color-space-stone) 100%);
+  }
+
+  :global(.dark) .podcast-image-placeholder {
+    background: linear-gradient(135deg, var(--color-space-yellow) 0%, var(--color-space-stone) 100%);
+  }
+
+  .podcast-image-placeholder svg {
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.5;
+  }
+
+  .duration-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 500;
+  }
+
+  .podcast-content {
+    padding: 1.5rem;
+  }
+
+  .podcast-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 300;
+  }
+
+  .episode-info {
+    background: rgba(144, 57, 58, 0.2);
+    color: var(--color-space-red);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+
+  :global(.dark) .episode-info {
+    background: rgba(255, 255, 133, 0.2);
+    color: var(--color-space-yellow);
+  }
+
+  .podcast-title {
+    font-family: 'Sigmar', cursive;
+    font-size: 1.25rem;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+  }
+
+  .podcast-description {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 300;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .podcast-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .listen-cta {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 500;
+    color: var(--color-space-red);
+    font-size: 0.875rem;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+
+  :global(.dark) .listen-cta {
+    color: var(--color-space-yellow);
+  }
+
+  .podcast-card:hover .listen-cta {
+    transform: translateX(4px);
+  }
+</style>

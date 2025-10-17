@@ -481,12 +481,14 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   attributes: {
     author: Schema.Attribute.String;
     body: Schema.Attribute.RichText;
+    comments: Schema.Attribute.Relation<"oneToMany", "api::comment.comment">;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     draft: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     image: Schema.Attribute.Component<"shared.image", false>;
+    likes: Schema.Attribute.Relation<"oneToMany", "api::like.like">;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       "oneToMany",
@@ -497,6 +499,167 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<"title">;
     tags: Schema.Attribute.JSON;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCommentComment extends Struct.CollectionTypeSchema {
+  collectionName: "comments";
+  info: {
+    description: "User comments on blog posts";
+    displayName: "Comment";
+    pluralName: "comments";
+    singularName: "comment";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    approved: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    authorEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    authorName: Schema.Attribute.String & Schema.Attribute.Required;
+    authorWebsite: Schema.Attribute.String;
+    blog_post: Schema.Attribute.Relation<
+      "manyToOne",
+      "api::blog-post.blog-post"
+    >;
+    content: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+    ipAddress: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::comment.comment"
+    > &
+      Schema.Attribute.Private;
+    parentComment: Schema.Attribute.Relation<
+      "oneToOne",
+      "api::comment.comment"
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiLikeLike extends Struct.CollectionTypeSchema {
+  collectionName: "likes";
+  info: {
+    description: "User likes on blog posts";
+    displayName: "Like";
+    pluralName: "likes";
+    singularName: "like";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    blog_post: Schema.Attribute.Relation<
+      "manyToOne",
+      "api::blog-post.blog-post"
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+    ipAddress: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<"oneToMany", "api::like.like"> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sessionId: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPodcastPodcast extends Struct.CollectionTypeSchema {
+  collectionName: "podcasts";
+  info: {
+    description: "Podcast episodes";
+    displayName: "Podcast";
+    pluralName: "podcasts";
+    singularName: "podcast";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    audioUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    author: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<"Aniekan Akpan">;
+    coverImage: Schema.Attribute.Component<"shared.image", false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    duration: Schema.Attribute.String;
+    episodeNumber: Schema.Attribute.Integer;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::podcast.podcast"
+    > &
+      Schema.Attribute.Private;
+    pubDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    season: Schema.Attribute.Integer;
+    slug: Schema.Attribute.UID<"title"> & Schema.Attribute.Required;
+    tags: Schema.Attribute.JSON;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    transcript: Schema.Attribute.RichText;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProjectProject extends Struct.CollectionTypeSchema {
+  collectionName: "projects";
+  info: {
+    description: "Portfolio projects showcase";
+    displayName: "Project";
+    pluralName: "projects";
+    singularName: "project";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    body: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    endDate: Schema.Attribute.Date;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    gallery: Schema.Attribute.Media<"images", true>;
+    githubUrl: Schema.Attribute.String;
+    image: Schema.Attribute.Component<"shared.image", false>;
+    liveUrl: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      "oneToMany",
+      "api::project.project"
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<"title">;
+    startDate: Schema.Attribute.Date;
+    status: Schema.Attribute.Enumeration<
+      ["planning", "in-progress", "completed", "maintenance"]
+    > &
+      Schema.Attribute.DefaultTo<"completed">;
+    tags: Schema.Attribute.JSON;
+    technologies: Schema.Attribute.JSON;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<"oneToOne", "admin::user"> &
@@ -1016,6 +1179,10 @@ declare module "@strapi/strapi" {
       "admin::transfer-token-permission": AdminTransferTokenPermission;
       "admin::user": AdminUser;
       "api::blog-post.blog-post": ApiBlogPostBlogPost;
+      "api::comment.comment": ApiCommentComment;
+      "api::like.like": ApiLikeLike;
+      "api::podcast.podcast": ApiPodcastPodcast;
+      "api::project.project": ApiProjectProject;
       "plugin::content-releases.release": PluginContentReleasesRelease;
       "plugin::content-releases.release-action": PluginContentReleasesReleaseAction;
       "plugin::i18n.locale": PluginI18NLocale;

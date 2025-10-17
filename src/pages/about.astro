@@ -6,19 +6,71 @@ import coverImage from "../assets/images/1.png";
 ---
 
 <MainLayout activePage="about" pageTitle={siteConfig.title + " | About"}>
-  <div class="page-content">
+  <div class="page-content about-page">
     <h1 class="sigmar-ff text-balance">{siteConfig.about?.title}</h1>
-    <Image
-      width={1024}
-      height={600}
-      loading="eager"
-      layout="constrained"
-      class="rounded-4xl mb-8 mx-auto"
-      src={coverImage}
-      alt="An Astronaut walking on a terrain"
-    />
-    <p class="kanit-light text-left">
-      {siteConfig.about?.text}
-    </p>
+    <div class="about-content">
+      <Image
+        width={400}
+        height={300}
+        loading="eager"
+        class="about-image"
+        src={coverImage}
+        alt="An Astronaut walking on a terrain"
+      />
+      <p class="kanit-light text-left about-text">
+        {siteConfig.about?.text}
+      </p>
+    </div>
   </div>
 </MainLayout>
+
+<style>
+  .about-page {
+    max-width: 64rem;
+  }
+
+  .about-content {
+    position: relative;
+    text-align: left;
+  }
+
+  .about-image {
+    float: right;
+    margin: 0 0 1.5rem 2rem;
+    border-radius: 1rem;
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    border: 2px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 
+      0 8px 24px rgba(16, 185, 129, 0.25),
+      0 0 40px rgba(16, 185, 129, 0.2),
+      0 0 80px rgba(16, 185, 129, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  }
+
+  .about-image:hover {
+    transform: translateY(-4px);
+    border-color: rgba(52, 211, 153, 0.6);
+    box-shadow: 
+      0 12px 32px rgba(16, 185, 129, 0.35),
+      0 0 60px rgba(52, 211, 153, 0.3),
+      0 0 100px rgba(16, 185, 129, 0.2);
+  }
+
+  .about-text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Responsive: Stack image on top for smaller screens */
+  @media (max-width: 768px) {
+    .about-image {
+      float: none;
+      margin: 0 auto 2rem auto;
+      display: block;
+      max-width: 100%;
+    }
+  }
+</style>

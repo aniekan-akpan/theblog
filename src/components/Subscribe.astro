@@ -12,7 +12,7 @@ const { class: className } = Astro.props;
     <section
       id="subscribe"
       class:list={[
-        "p-8 flex flex-col items-center border border-dashed border-gray-500 rounded-2xl text-center",
+        "p-8 flex flex-col items-center border border-dashed border-gray-500 rounded-2xl text-center subscribe-section",
         className,
       ]}
     >
@@ -27,7 +27,7 @@ const { class: className } = Astro.props;
         </h2>
       )}
       {subscribe.text && (
-        <p class="w-full max-w-xl mb-8 text-sm leading-normal text-balance">
+        <p class="w-full max-w-xl mb-8 text-sm leading-normal text-balance kanit-light">
           {subscribe.text}
         </p>
       )}
@@ -45,7 +45,7 @@ const { class: className } = Astro.props;
         <input
           type="email"
           name="email"
-          id="email"
+          id="subscribe-email"
           class="w-full h-9 px-5 py-2 text-sm bg-transparent outline-gray-500 rounded-full kanit-light placeholder:text-gray-500/50 dark:placeholder:text-gray-300/50 focus:outline-space-red dark:focus:outline-space-yellow outline-1"
           required=""
           value=""
@@ -59,6 +59,127 @@ const { class: className } = Astro.props;
           Subscribe
         </Button>
       </form>
+      <div id="subscribe-message" class="subscribe-message hidden"></div>
     </section>
   )
 }
+
+<style>
+  .subscribe-section {
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      rgba(22, 52, 42, 0.4) 0%,
+      rgba(15, 31, 26, 0.6) 100%
+    );
+    backdrop-filter: blur(10px);
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 
+      inset 0 1px 0 0 rgba(16, 185, 129, 0.1),
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(16, 185, 129, 0.1);
+  }
+
+  .subscribe-section:hover {
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 
+      inset 0 1px 0 0 rgba(16, 185, 129, 0.15),
+      0 12px 32px rgba(0, 0, 0, 0.5),
+      0 0 60px rgba(16, 185, 129, 0.15);
+  }
+
+  .subscribe-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 300;
+    font-size: 0.875rem;
+  }
+
+  .subscribe-message.success {
+    background: rgba(34, 197, 94, 0.2);
+    color: rgb(34, 197, 94);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+
+  .subscribe-message.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: rgb(239, 68, 68);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Initialize subscribe form functionality
+  function initSubscribeForm() {
+    const form = document.getElementById('subscribe-form') as HTMLFormElement;
+    const emailInput = document.getElementById('subscribe-email') as HTMLInputElement;
+    const messageDiv = document.getElementById('subscribe-message') as HTMLDivElement;
+
+    if (!form || !emailInput || !messageDiv) return;
+
+    // Check if using a custom form URL (Mailchimp, ConvertKit, etc.)
+    const formUrl = form.getAttribute('action');
+    
+    // If using '#' as placeholder, prevent default and show instructions
+    if (formUrl === '#') {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = emailInput.value;
+        
+        // Show success message
+        messageDiv.textContent = `Thanks for subscribing with ${email}! Please configure your email service in site.config.ts`;
+        messageDiv.className = 'subscribe-message success';
+        
+        // Clear form
+        form.reset();
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          messageDiv.className = 'subscribe-message hidden';
+        }, 5000);
+        
+        // Store in localStorage as a fallback (optional)
+        const subscribers = JSON.parse(localStorage.getItem('subscribers') || '[]');
+        if (!subscribers.includes(email)) {
+          subscribers.push(email);
+          localStorage.setItem('subscribers', JSON.stringify(subscribers));
+          console.log('Stored subscribers:', subscribers);
+        }
+      });
+      
+      return;
+    }
+
+    // For real email services, you can add validation here
+    form.addEventListener('submit', (e) => {
+      const email = emailInput.value;
+      
+      if (!email || !email.includes('@')) {
+        e.preventDefault();
+        messageDiv.textContent = 'Please enter a valid email address';
+        messageDiv.className = 'subscribe-message error';
+        
+        setTimeout(() => {
+          messageDiv.className = 'subscribe-message hidden';
+        }, 3000);
+      }
+    });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSubscribeForm);
+  } else {
+    initSubscribeForm();
+  }
+
+  // Re-initialize on navigation (for Astro view transitions)
+  document.addEventListener('astro:page-load', initSubscribeForm);
+</script>
